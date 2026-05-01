@@ -4,151 +4,108 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DepoPanel</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#07111f;color:white}
-.app{display:flex;min-height:100vh}
-.sidebar{width:260px;background:#081322;border-right:1px solid #1f2a3a;padding:20px}
-.logo{font-size:24px;font-weight:bold;margin-bottom:30px}
-.menu div{padding:13px;border-radius:10px;margin:6px 0;color:#cbd5e1}
-.menu div.active,.menu div:hover{background:#4f46e5;color:white}
-.guest{margin-top:40px;background:#0f1b2e;padding:18px;border-radius:15px;text-align:center}
-.guest button,.addBtn,.ai button{background:#22c55e;color:white;border:0;padding:12px;border-radius:10px;width:100%;font-weight:bold}
-.main{flex:1;padding:18px}
-.top{display:flex;gap:15px;align-items:center;margin-bottom:20px}
-.search{flex:1;background:#0f1b2e;border:1px solid #243247;color:white;padding:14px;border-radius:12px}
-.addBtn{width:170px;background:#4f46e5}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
-.stat,.panel,.ai,.project{background:#0f1b2e;border:1px solid #243247;border-radius:15px;padding:18px}
-.stat h2{margin:8px 0;font-size:30px}
-.content{display:grid;grid-template-columns:2fr 1fr;gap:15px;margin-top:15px}
-table{width:100%;border-collapse:collapse}
-th,td{padding:13px;border-bottom:1px solid #243247;text-align:left}
-th{color:#94a3b8}
-img{width:60px;height:45px;object-fit:cover;border-radius:8px;background:white}
-.tag{padding:6px 10px;border-radius:8px;background:#312e81;color:#c4b5fd}
-.good{color:#22c55e}.low{color:#f59e0b}.bad{color:#ef4444}
-.ai h3{color:#8b5cf6}
-.ai input{width:100%;padding:13px;border-radius:10px;border:1px solid #334155;background:#111827;color:white;margin-top:10px}
-.ai button{margin-top:10px;background:#7c3aed}
-.project{margin-top:15px}
-.project img{width:100%;height:150px}
-@media(max-width:900px){
-.app{display:block}
-.sidebar{width:100%}
-.stats{grid-template-columns:1fr 1fr}
-.content{grid-template-columns:1fr}
+body{
+  font-family: Arial;
+  background:#020617;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.box{
+  background:#0f172a;
+  padding:30px;
+  border-radius:15px;
+  width:300px;
+  text-align:center;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  border-radius:8px;
+  border:none;
+}
+
+button{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border:none;
+  border-radius:8px;
+  background:#6366f1;
+  color:white;
+  cursor:pointer;
+}
+
+h1{
+  margin-bottom:20px;
 }
 </style>
+
 </head>
+
 <body>
 
-<div class="app">
+<div class="box">
+<h1>DepoPanel 🔐</h1>
 
-<div class="sidebar">
-<div class="logo">🔷 DepoPanel</div>
-<div class="menu">
-<div class="active">🏠 Ana Sayfa</div>
-<div>📦 Tüm Malzemeler</div>
-<div>🗂️ Kategoriler</div>
-<div>📍 Reyonlar</div>
-<div>⚠️ Az Kalanlar</div>
-<div>🚚 Eksik Malzemeler</div>
-<br>
-<div>🤖 Yapay Zeka Asistanı</div>
-<div>✨ Proje Fikirleri</div>
-<div>💡 Eksik Parça Önerileri</div>
-<br>
-<div>💬 Mesajlar</div>
-<div>📢 Duyurular</div>
-<br>
-<div>👥 Kullanıcılar</div>
-<div>🔑 Davet Kodları</div>
-<div>⚙️ Ayarlar</div>
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Şifre">
+
+<button onclick="register()">Kayıt Ol</button>
+<button onclick="login()">Giriş Yap</button>
+
+<p id="msg"></p>
 </div>
 
-<div class="guest">
-<h3>Misafir Modu</h3>
-<p>Sınırlı erişimdesiniz</p>
-<button>🔒 Üye Girişi Yap</button>
-</div>
-</div>
+<script>
+const SUPABASE_URL = "slchqkwqqbptqnmfrihj";
+const SUPABASE_KEY = "https://slchqkwqqbptqnmfrihj.supabase.co/rest/v1/";
 
-<div class="main">
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-<div class="top">
-<input class="search" placeholder="🔍 Malzeme ara...">
-<button class="addBtn">+ Malzeme Ekle</button>
-<div>🔔</div>
-<div>Hoş geldin, <b>Admin</b></div>
-</div>
+// kayıt
+async function register(){
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-<div class="stats">
-<div class="stat"><p>Toplam Malzeme</p><h2>243</h2><span class="good">+12 bu ay</span></div>
-<div class="stat"><p>Az Kalanlar</p><h2>18</h2><span class="low">Dikkat edilmeli</span></div>
-<div class="stat"><p>Eksik Malzemeler</p><h2>7</h2><span class="bad">Sipariş verilmeli</span></div>
-<div class="stat"><p>Toplam Değer</p><h2>₺45.250</h2><span>Tahmini değer</span></div>
-</div>
+  const { error } = await db.auth.signUp({
+    email,
+    password
+  });
 
-<div class="content">
+  if(error){
+    document.getElementById("msg").innerText = error.message;
+  } else {
+    document.getElementById("msg").innerText = "Kayıt başarılı!";
+  }
+}
 
-<div>
-<div class="panel">
-<h2>Malzemeler</h2>
-<p>Tüm malzemelerin listesi</p>
-<table>
-<tr>
-<th>Fotoğraf</th><th>Malzeme Adı</th><th>Kategori</th><th>Reyon</th><th>Adet</th><th>Durum</th>
-</tr>
-<tr>
-<td><img src="https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"></td>
-<td>Arduino Uno R3</td><td><span class="tag">Elektronik</span></td><td>A1-01</td><td>2 adet</td><td class="low">Az Kaldı</td>
-</tr>
-<tr>
-<td><img src="https://upload.wikimedia.org/wikipedia/commons/8/87/HD44780_LCD_16x2_display.jpg"></td>
-<td>LCD 16x2 Ekran</td><td><span class="tag">Ekranlar</span></td><td>B2-03</td><td>1 adet</td><td class="low">Az Kaldı</td>
-</tr>
-<tr>
-<td><img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Resistors.JPG"></td>
-<td>220 Ohm Direnç</td><td><span class="tag">Elektronik</span></td><td>A1-05</td><td>50 adet</td><td class="good">Yeterli</td>
-</tr>
-<tr>
-<td><img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Jumper_wires.jpg"></td>
-<td>Jumper Kablo</td><td><span class="tag">Kablolar</span></td><td>C1-02</td><td>0 adet</td><td class="bad">Eksik</td>
-</tr>
-</table>
-</div>
+// giriş
+async function login(){
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-<div class="panel" style="margin-top:15px">
-<h2>Son Duyurular</h2>
-<p>📢 LCD ekranlar artık B2 reyonunda bulunmaktadır.</p>
-<p>📢 Haftalık stok kontrolü yapılacaktır.</p>
-</div>
-</div>
+  const { error } = await db.auth.signInWithPassword({
+    email,
+    password
+  });
 
-<div>
-<div class="ai">
-<h3>✨ Yapay Zeka Asistanı</h3>
-<p>Merhaba 👋 Ben senin yapay zeka asistanın. Sana proje fikri verebilirim.</p>
-<button>Elimdeki malzemelerle ne yapabilirim?</button>
-<button>Eksik malzemeleri listele</button>
-<button>Bana proje fikri ver</button>
-<input placeholder="Sorunuzu yazın...">
-</div>
-
-<div class="project">
-<h3>🏆 Proje Fikri Önerisi</h3>
-<img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800">
-<h3>Akıllı Hava Kalitesi Monitörü</h3>
-<p>DHT11 sensörü ile sıcaklık ve nem ölçen, LCD ekranda gösteren sistem.</p>
-<p><span class="tag">Arduino</span> <span class="tag">LCD 16x2</span></p>
-<button class="addBtn" style="width:100%">Detayları Gör</button>
-</div>
-</div>
-
-</div>
-</div>
-</div>
+  if(error){
+    document.getElementById("msg").innerText = error.message;
+  } else {
+    document.getElementById("msg").innerText = "Giriş başarılı!";
+  }
+}
+</script>
 
 </body>
-</htm
+</html>
