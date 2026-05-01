@@ -5,23 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DepoPanel</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial;background:#020617;color:white}
 button{cursor:pointer}
 .hidden{display:none}
-.login{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr;background:radial-gradient(circle at 25% 40%,rgba(124,58,237,.35),transparent 35%),#020617}
+.login{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr;background:radial-gradient(circle at 20% 40%,rgba(124,58,237,.35),transparent 35%),#020617}
 .left{padding:70px;text-align:center;display:flex;flex-direction:column;justify-content:center}
-.logo{width:130px;height:130px;margin:auto;border-radius:30px;background:linear-gradient(135deg,#8b5cf6,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:70px;font-weight:bold;box-shadow:0 0 60px #7c3aed;animation:pulse 2s infinite}
+.logo{width:130px;height:130px;margin:auto;border-radius:32px;background:linear-gradient(135deg,#8b5cf6,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:70px;font-weight:bold;box-shadow:0 0 70px #7c3aed;animation:pulse 2s infinite}
 h1{font-size:64px;margin:20px 0 5px}.purple{color:#8b5cf6}.sub{color:#cbd5e1;font-size:22px}
-.features{display:flex;gap:25px;margin-top:80px;text-align:left}.feature{flex:1;border-left:1px solid #334155;padding-left:20px;color:#cbd5e1}
-.right{display:flex;align-items:center;justify-content:center;padding:40px}.card{width:100%;max-width:560px;background:rgba(15,23,42,.86);border:1px solid #263449;border-radius:24px;padding:40px}
-.tabs{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid #334155;margin:20px 0}.tab{text-align:center;padding:15px;color:#cbd5e1}.tab.active{color:#a855f7;border-bottom:3px solid #8b5cf6;font-weight:bold}
+.features{display:flex;gap:25px;margin-top:80px;text-align:left}.feature{flex:1;border-left:1px solid #334155;padding-left:18px;color:#cbd5e1}
+.right{display:flex;align-items:center;justify-content:center;padding:40px}
+.card{width:100%;max-width:560px;background:rgba(15,23,42,.9);border:1px solid #263449;border-radius:24px;padding:40px}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid #334155;margin:20px 0}
+.tab{text-align:center;padding:15px;color:#cbd5e1;cursor:pointer}.tab.active{color:#a855f7;border-bottom:3px solid #8b5cf6;font-weight:bold}
 .input{width:100%;padding:15px;margin:9px 0;border-radius:12px;border:1px solid #374151;background:#111827;color:white}
 .btn{width:100%;padding:15px;border:0;border-radius:12px;background:linear-gradient(90deg,#8b5cf6,#4f46e5);color:white;font-weight:bold;margin-top:12px}
 .msg{text-align:center;color:#a7f3d0}.err{color:#fca5a5}
 .app{display:flex;min-height:100vh}.side{width:270px;background:#081322;padding:20px;border-right:1px solid #1f2a3a}.brand{font-size:25px;font-weight:bold;margin-bottom:30px}
-.menu div{padding:13px;border-radius:10px;margin:7px 0;color:#cbd5e1}.menu div:hover,.menu .active{background:#4f46e5;color:white}
+.menu div{padding:13px;border-radius:10px;margin:7px 0;color:#cbd5e1;cursor:pointer}.menu div:hover,.menu .active{background:#4f46e5;color:white}
 .main{flex:1;padding:20px}.top{display:flex;gap:12px;align-items:center;margin-bottom:20px}
 .search{flex:1;padding:14px;border-radius:12px;border:1px solid #243247;background:#0f1b2e;color:white}
 .add{background:#4f46e5;color:white;border:0;border-radius:10px;padding:13px 17px}
@@ -30,10 +33,11 @@ h1{font-size:64px;margin:20px 0 5px}.purple{color:#8b5cf6}.sub{color:#cbd5e1;fon
 table{width:100%;border-collapse:collapse}th,td{padding:12px;border-bottom:1px solid #243247;text-align:left}th{color:#94a3b8}
 .tag{padding:6px 10px;background:#312e81;color:#c4b5fd;border-radius:8px}.good{color:#22c55e}.low{color:#f59e0b}.bad{color:#ef4444}
 .form{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.danger{background:#dc2626}.gold{color:#facc15}.diamond{color:#67e8f9}
-@keyframes pulse{50%{transform:translateY(-12px);box-shadow:0 0 90px #a855f7}}
+@keyframes pulse{50%{transform:translateY(-12px);box-shadow:0 0 100px #a855f7}}
 @media(max-width:900px){.login{grid-template-columns:1fr}.features{display:block}.app{display:block}.side{width:100%}.stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}}
 </style>
 </head>
+
 <body>
 <div id="root"></div>
 
@@ -41,231 +45,329 @@ table{width:100%;border-collapse:collapse}th,td{padding:12px;border-bottom:1px s
 const SUPABASE_URL = "https://slchqkwqqbptqnmfrihj.supabase.co/rest/v1/";
 const SUPABASE_KEY = "slchqkwqqbptqnmfrihj";
 
+const ADMIN_CODE = "ATAADMIN";
 const MEMBER_CODE = "DEPANEL2025";
-const ADMIN_CODE = "ELMAS2025";
 
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-let mode="login", currentUser=null, currentRole="user", materials=[], profiles=[];
+let mode = "login";
+let role = "guest";
+let materials = [];
+let messages = JSON.parse(localStorage.getItem("messages") || "[]");
 
 showLogin();
 
 function showLogin(){
-root.innerHTML=`
+root.innerHTML = `
 <div class="login">
- <div class="left">
-  <div class="logo">D</div>
-  <h1>Depo<span class="purple">Panel</span></h1>
-  <div class="sub">Akıllı Depo & Malzeme Yönetim Sistemi</div>
-  <div class="features">
-   <div class="feature"><b>⚙️ Kolay Yönetim</b><p>Tüm malzemeleri tek yerden yönetin.</p></div>
-   <div class="feature"><b>🤖 Akıllı Asistan</b><p>Eksik parça ve proje önerileri.</p></div>
-   <div class="feature"><b>🛡️ Güvenli Sistem</b><p>Üye, kıdemli üye ve admin sistemi.</p></div>
+  <div class="left">
+    <div class="logo">D</div>
+    <h1>Depo<span class="purple">Panel</span></h1>
+    <div class="sub">Akıllı Depo & Malzeme Yönetim Sistemi</div>
+    <div class="features">
+      <div class="feature"><b>⚙️ Kolay Yönetim</b><p>Malzemeleri tek yerden yönetin.</p></div>
+      <div class="feature"><b>🤖 Akıllı Asistan</b><p>Proje ve eksik parça önerileri alın.</p></div>
+      <div class="feature"><b>🛡️ Güvenli Sistem</b><p>Üye ve admin giriş sistemi.</p></div>
+    </div>
   </div>
- </div>
- <div class="right">
-  <div class="card">
-   <h2 style="text-align:center">Hoş Geldiniz 👋</h2>
-   <p style="text-align:center;color:#cbd5e1">Giriş yapın veya hesap oluşturun.</p>
-   <div class="tabs">
-    <div id="tLogin" class="tab active" onclick="setMode('login')">Oturum Aç</div>
-    <div id="tReg" class="tab" onclick="setMode('register')">Kayıt Ol</div>
-    <div id="tAdmin" class="tab" onclick="setMode('admin')">Admin</div>
-   </div>
-   <input id="email" class="input" placeholder="E-posta">
-   <input id="pass" class="input" type="password" placeholder="Şifre">
-   <input id="code" class="input hidden" placeholder="Davet / Admin kodu">
-   <button id="mainBtn" class="btn" onclick="mainAction()">Giriş Yap</button>
-   <p id="msg" class="msg"></p>
+
+  <div class="right">
+    <div class="card">
+      <h2 style="text-align:center">Hoş Geldiniz 👋</h2>
+      <p style="text-align:center;color:#cbd5e1">Devam etmek için giriş yapın.</p>
+
+      <div class="tabs">
+        <div id="tabLogin" class="tab active" onclick="setMode('login')">Oturum Aç</div>
+        <div id="tabRegister" class="tab" onclick="setMode('register')">Kayıt Ol</div>
+        <div id="tabAdmin" class="tab" onclick="setMode('admin')">Admin</div>
+      </div>
+
+      <input id="email" class="input" placeholder="E-posta">
+      <input id="password" class="input" type="password" placeholder="Şifre">
+      <input id="code" class="input hidden" placeholder="Kod">
+
+      <button id="mainBtn" class="btn" onclick="mainAction()">Giriş Yap</button>
+      <p id="msg" class="msg"></p>
+    </div>
   </div>
- </div>
 </div>`;
 }
 
 function setMode(m){
- mode=m;
- tLogin.classList.toggle("active",m==="login");
- tReg.classList.toggle("active",m==="register");
- tAdmin.classList.toggle("active",m==="admin");
- code.classList.toggle("hidden",m==="login");
- mainBtn.innerText=m==="register"?"Kayıt Ol":m==="admin"?"Admin Girişi":"Giriş Yap";
- msg.innerText="";
+  mode = m;
+  tabLogin.classList.toggle("active", m==="login");
+  tabRegister.classList.toggle("active", m==="register");
+  tabAdmin.classList.toggle("active", m==="admin");
+
+  email.classList.toggle("hidden", m==="admin");
+  password.classList.toggle("hidden", m==="admin");
+  code.classList.toggle("hidden", m==="login");
+
+  mainBtn.innerText = m==="register" ? "Kayıt Ol" : m==="admin" ? "Admin Koduyla Gir" : "Giriş Yap";
+  msg.innerText = "";
 }
 
 async function mainAction(){
- if(mode==="register") return register();
- if(mode==="admin") return adminLogin();
- return login();
-}
-
-async function register(){
- let email=v("email"), password=v("pass"), c=v("code");
- if(c!==MEMBER_CODE)return showMsg("Davet kodu yanlış.",true);
- let {data,error}=await db.auth.signUp({email,password});
- if(error)return showMsg(error.message,true);
- if(data.user){
-  await db.from("profiles").insert({
-   id:data.user.id,email,role:"user",level:1,badge:"none",
-   joined_at:new Date().toISOString(),last_seen:new Date().toISOString()
-  });
- }
- showMsg("Kayıt başarılı. Şimdi giriş yap.");
- setMode("login");
-}
-
-async function login(){
- let {data,error}=await db.auth.signInWithPassword({email:v("email"),password:v("pass")});
- if(error)return showMsg(error.message,true);
- currentUser=data.user; currentRole="user";
- await loadAll(); render("home");
+  if(mode==="admin") return adminLogin();
+  if(mode==="register") return register();
+  return login();
 }
 
 async function adminLogin(){
- if(v("code")!==ADMIN_CODE)return showMsg("Admin kodu yanlış.",true);
- let {data,error}=await db.auth.signInWithPassword({email:v("email"),password:v("pass")});
- if(error)return showMsg(error.message,true);
- currentUser=data.user; currentRole="admin";
- await db.from("profiles").upsert({
-  id:data.user.id,email:data.user.email,role:"admin",level:20,badge:"diamond",
-  joined_at:new Date().toISOString(),last_seen:new Date().toISOString()
- });
- await loadAll(); render("home");
+  if(v("code") !== ADMIN_CODE){
+    return showMsg("Admin kodu yanlış.", true);
+  }
+
+  role = "admin";
+  await loadMaterials();
+  render("home");
 }
 
-async function loadAll(){
- let m=await db.from("materials").select("*").order("created_at",{ascending:false});
- materials=m.data||[];
- let p=await db.from("profiles").select("*");
- profiles=p.data||[];
+async function register(){
+  if(v("code") !== MEMBER_CODE) return showMsg("Davet kodu yanlış.", true);
+
+  const { error } = await db.auth.signUp({
+    email: v("email"),
+    password: v("password")
+  });
+
+  if(error) return showMsg(error.message, true);
+
+  showMsg("Kayıt başarılı. Şimdi giriş yap.");
+  setMode("login");
+}
+
+async function login(){
+  const { error } = await db.auth.signInWithPassword({
+    email: v("email"),
+    password: v("password")
+  });
+
+  if(error) return showMsg(error.message, true);
+
+  role = "user";
+  await loadMaterials();
+  render("home");
+}
+
+async function loadMaterials(){
+  const { data, error } = await db.from("materials").select("*").order("created_at", {ascending:false});
+
+  if(error){
+    materials = JSON.parse(localStorage.getItem("materials") || "[]");
+  }else{
+    materials = data || [];
+  }
 }
 
 function render(page){
- let total=materials.length;
- let low=materials.filter(x=>Number(x.quantity)>0&&Number(x.quantity)<=Number(x.min_quantity||0)).length;
- let miss=materials.filter(x=>Number(x.quantity)<=0).length;
- root.innerHTML=`
- <div class="app">
-  <div class="side">
-   <div class="brand">🔷 DepoPanel</div>
-   <div class="menu">
-    <div class="${page==='home'?'active':''}" onclick="render('home')">🏠 Ana Sayfa</div>
-    <div onclick="render('materials')">📦 Malzemeler</div>
-    <div onclick="render('projects')">🤖 Proje Önerileri</div>
-    <div onclick="render('messages')">💬 Mesajlar</div>
-    <div onclick="render('theme')">🎨 Tema</div>
-    ${currentRole==="admin"?`<div onclick="render('admin')">💎 Admin Paneli</div>`:""}
-    <div onclick="logout()">🚪 Çıkış</div>
-   </div>
-  </div>
-  <div class="main">
-   <div class="top">
-    <input id="search" class="search" placeholder="Malzeme ara..." oninput="drawMaterials(this.value)">
-    ${currentRole==="admin"?`<button class="add" onclick="toggleForm()">+ Malzeme Ekle</button>`:""}
-    <b>${currentRole==="admin"?"💎 Admin":"👤 Üye"}</b>
-   </div>
-   <div class="stats">
-    <div class="box"><p>Toplam Malzeme</p><h2>${total}</h2></div>
-    <div class="box"><p>Az Kalanlar</p><h2 class="low">${low}</h2></div>
-    <div class="box"><p>Eksikler</p><h2 class="bad">${miss}</h2></div>
-    <div class="box"><p>Seviye</p><h2>${currentRole==="admin"?"20":"1"}</h2></div>
-   </div>
-   <div id="area"></div>
-  </div>
- </div>`;
- if(page==="home"||page==="materials") materialsPage();
- if(page==="projects") projectsPage();
- if(page==="messages") messagesPage();
- if(page==="theme") themePage();
- if(page==="admin") adminPage();
+  const total = materials.length;
+  const low = materials.filter(x => Number(x.quantity)>0 && Number(x.quantity)<=Number(x.min_quantity||0)).length;
+  const miss = materials.filter(x => Number(x.quantity)<=0).length;
+
+  root.innerHTML = `
+  <div class="app">
+    <div class="side">
+      <div class="brand">🔷 DepoPanel</div>
+      <div class="menu">
+        <div class="${page==='home'?'active':''}" onclick="render('home')">🏠 Ana Sayfa</div>
+        <div onclick="render('materials')">📦 Malzemeler</div>
+        <div onclick="render('projects')">🤖 Proje Önerileri</div>
+        <div onclick="render('messages')">💬 Mesajlar</div>
+        <div onclick="render('theme')">🎨 Tema</div>
+        ${role==="admin" ? `<div onclick="render('admin')">💎 Admin Paneli</div>` : ""}
+        <div onclick="logout()">🚪 Çıkış</div>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="top">
+        <input id="search" class="search" placeholder="Malzeme ara..." oninput="drawMaterials(this.value)">
+        ${role==="admin" ? `<button class="add" onclick="toggleForm()">+ Malzeme Ekle</button>` : ""}
+        <b>${role==="admin" ? "💎 Admin" : "👤 Üye"}</b>
+      </div>
+
+      <div class="stats">
+        <div class="box"><p>Toplam Malzeme</p><h2>${total}</h2></div>
+        <div class="box"><p>Az Kalanlar</p><h2 class="low">${low}</h2></div>
+        <div class="box"><p>Eksikler</p><h2 class="bad">${miss}</h2></div>
+        <div class="box"><p>Yetki</p><h2>${role==="admin" ? "💎" : "👤"}</h2></div>
+      </div>
+
+      <div id="area"></div>
+    </div>
+  </div>`;
+
+  if(page==="home" || page==="materials") materialsPage();
+  if(page==="projects") projectsPage();
+  if(page==="messages") messagesPage();
+  if(page==="theme") themePage();
+  if(page==="admin") adminPage();
 }
 
 function materialsPage(){
- area.innerHTML=`
- ${currentRole==="admin"?`
- <div id="form" class="panel hidden" style="margin-top:15px">
-  <h2>Malzeme Ekle</h2>
-  <div class="form">
-   <input id="mName" class="input" placeholder="Malzeme adı">
-   <input id="mQty" class="input" type="number" placeholder="Adet">
-   <input id="mCat" class="input" placeholder="Kategori">
-   <input id="mLoc" class="input" placeholder="Reyon / raf">
-   <input id="mImg" class="input" placeholder="Fotoğraf linki">
-   <input id="mMin" class="input" type="number" placeholder="Minimum adet">
-  </div>
-  <button class="add" onclick="addMaterial()">Kaydet</button>
- </div>`:""}
- <div class="grid">
-  <div class="panel"><h2>Malzemeler</h2><table><thead><tr><th>Foto</th><th>Ad</th><th>Kategori</th><th>Konum</th><th>Adet</th><th>Durum</th>${currentRole==="admin"?"<th>İşlem</th>":""}</tr></thead><tbody id="tbody"></tbody></table></div>
-  <div class="panel"><h2>🤖 Asistan</h2><p>Elindeki parçalara göre öneri verir.</p><button class="btn" onclick="suggest()">Proje Öner</button><p id="ai"></p></div>
- </div>`;
- drawMaterials("");
+  area.innerHTML = `
+  ${role==="admin" ? `
+  <div id="form" class="panel hidden" style="margin-top:15px">
+    <h2>Malzeme Ekle</h2>
+    <div class="form">
+      <input id="mName" class="input" placeholder="Malzeme adı">
+      <input id="mQty" class="input" type="number" placeholder="Adet">
+      <input id="mCat" class="input" placeholder="Kategori">
+      <input id="mLoc" class="input" placeholder="Reyon / Raf">
+      <input id="mImg" class="input" placeholder="Fotoğraf linki">
+      <input id="mMin" class="input" type="number" placeholder="Minimum adet">
+    </div>
+    <button class="add" onclick="addMaterial()">Kaydet</button>
+  </div>` : ""}
+
+  <div class="grid">
+    <div class="panel">
+      <h2>Malzemeler</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Foto</th><th>Ad</th><th>Kategori</th><th>Konum</th><th>Adet</th><th>Durum</th>${role==="admin" ? "<th>İşlem</th>" : ""}
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <h2>🤖 Asistan</h2>
+      <p>Elindeki parçalara göre proje önerir.</p>
+      <button class="btn" onclick="suggest()">Proje Öner</button>
+      <p id="ai"></p>
+    </div>
+  </div>`;
+
+  drawMaterials("");
 }
 
 function drawMaterials(q=""){
- let list=materials.filter(x=>JSON.stringify(x).toLowerCase().includes(q.toLowerCase()));
- tbody.innerHTML=list.map(x=>{
-  let qty=Number(x.quantity||0), min=Number(x.min_quantity||0);
-  let d=qty<=0?`<span class="bad">Eksik</span>`:qty<=min?`<span class="low">Az Kaldı</span>`:`<span class="good">Yeterli</span>`;
-  return `<tr>
-   <td>${x.image_url?`<img src="${x.image_url}" width="55">`:"📦"}</td>
-   <td>${x.name||"-"}</td><td><span class="tag">${x.category||"-"}</span></td><td>${x.location||"-"}</td><td>${x.quantity||0}</td><td>${d}</td>
-   ${currentRole==="admin"?`<td><button class="add danger" onclick="delMaterial('${x.id}')">Sil</button></td>`:""}
-  </tr>`;
- }).join("");
+  let list = materials.filter(x => JSON.stringify(x).toLowerCase().includes(q.toLowerCase()));
+
+  tbody.innerHTML = list.map(x => {
+    let qty = Number(x.quantity || 0);
+    let min = Number(x.min_quantity || 0);
+    let durum = qty<=0 ? `<span class="bad">Eksik</span>` : qty<=min ? `<span class="low">Az Kaldı</span>` : `<span class="good">Yeterli</span>`;
+
+    return `
+    <tr>
+      <td>${x.image_url ? `<img src="${x.image_url}" width="55">` : "📦"}</td>
+      <td>${x.name || "-"}</td>
+      <td><span class="tag">${x.category || "-"}</span></td>
+      <td>${x.location || "-"}</td>
+      <td>${x.quantity || 0}</td>
+      <td>${durum}</td>
+      ${role==="admin" ? `<td><button class="add danger" onclick="deleteMaterial('${x.id}')">Sil</button></td>` : ""}
+    </tr>`;
+  }).join("");
 }
 
 async function addMaterial(){
- let item={name:v("mName"),quantity:Number(v("mQty")||0),category:v("mCat"),location:v("mLoc"),image_url:v("mImg"),min_quantity:Number(v("mMin")||1)};
- if(!item.name)return alert("Malzeme adı boş olamaz.");
- let {error}=await db.from("materials").insert(item);
- if(error)return alert(error.message);
- await loadAll(); render("materials");
+  const item = {
+    name:v("mName"),
+    quantity:Number(v("mQty") || 0),
+    category:v("mCat"),
+    location:v("mLoc"),
+    image_url:v("mImg"),
+    min_quantity:Number(v("mMin") || 1)
+  };
+
+  if(!item.name) return alert("Malzeme adı boş olamaz.");
+
+  const { error } = await db.from("materials").insert(item);
+
+  if(error){
+    item.id = Date.now().toString();
+    item.created_at = new Date().toISOString();
+    materials.unshift(item);
+    localStorage.setItem("materials", JSON.stringify(materials));
+  }
+
+  await loadMaterials();
+  render("materials");
 }
 
-async function delMaterial(id){
- if(!confirm("Silinsin mi?"))return;
- await db.from("materials").delete().eq("id",id);
- await loadAll(); render("materials");
+async function deleteMaterial(id){
+  if(!confirm("Silinsin mi?")) return;
+
+  const { error } = await db.from("materials").delete().eq("id", id);
+
+  if(error){
+    materials = materials.filter(x => x.id !== id);
+    localStorage.setItem("materials", JSON.stringify(materials));
+  }
+
+  await loadMaterials();
+  render("materials");
 }
 
 function projectsPage(){
- area.innerHTML=`<div class="panel" style="margin-top:15px"><h2>🤖 Proje Önerileri</h2><button class="btn" onclick="suggest()">Öneri üret</button><p id="ai"></p></div>`;
+  area.innerHTML = `
+  <div class="panel" style="margin-top:15px">
+    <h2>🤖 Proje Önerileri</h2>
+    <button class="btn" onclick="suggest()">Öneri Üret</button>
+    <p id="ai"></p>
+  </div>`;
 }
 
 function suggest(){
- let names=materials.map(x=>(x.name||"").toLowerCase()).join(" ");
- let r="Basit stok takip kutusu veya elektronik düzenleme paneli yapabilirsin.";
- if(names.includes("arduino")&&names.includes("lcd"))r="Arduino + LCD ile masaüstü saat / stok ekranı yapabilirsin.";
- if(names.includes("dht"))r="DHT sensörüyle sıcaklık-nem ölçer panel yapabilirsin.";
- ai.innerText=r;
+  let names = materials.map(x => (x.name || "").toLowerCase()).join(" ");
+  let result = "Basit stok takip kutusu veya elektronik düzenleme paneli yapabilirsin.";
+
+  if(names.includes("arduino") && names.includes("lcd")){
+    result = "Arduino + LCD ile masaüstü saat veya mini stok ekranı yapabilirsin.";
+  }
+
+  if(names.includes("dht")){
+    result = "DHT sensörü ile sıcaklık-nem takip paneli yapabilirsin.";
+  }
+
+  ai.innerText = result;
 }
 
 function messagesPage(){
- let msgs=JSON.parse(localStorage.getItem("msgs")||"[]");
- area.innerHTML=`<div class="panel" style="margin-top:15px"><h2>💬 Mesajlar</h2>
- ${currentRole==="admin"?`<input id="newMsg" class="input" placeholder="Duyuru yaz"><button class="add" onclick="addMsg()">Gönder</button>`:""}
- <div>${msgs.map(m=>`<p>📢 ${m}</p>`).join("")}</div></div>`;
+  area.innerHTML = `
+  <div class="panel" style="margin-top:15px">
+    <h2>💬 Mesajlar</h2>
+    ${role==="admin" ? `<input id="newMsg" class="input" placeholder="Duyuru yaz"><button class="add" onclick="addMsg()">Gönder</button>` : ""}
+    <div>${messages.map(m => `<p>📢 ${m}</p>`).join("")}</div>
+  </div>`;
 }
 
 function addMsg(){
- let msgs=JSON.parse(localStorage.getItem("msgs")||"[]");
- msgs.unshift(v("newMsg"));
- localStorage.setItem("msgs",JSON.stringify(msgs));
- render("messages");
+  messages.unshift(v("newMsg"));
+  localStorage.setItem("messages", JSON.stringify(messages));
+  render("messages");
 }
 
 function themePage(){
- area.innerHTML=`<div class="panel" style="margin-top:15px"><h2>🎨 Tema</h2><button class="btn" onclick="document.body.style.filter='hue-rotate(80deg)'">Yeşil Tema</button><button class="btn" onclick="document.body.style.filter='hue-rotate(160deg)'">Mavi Tema</button><button class="btn" onclick="document.body.style.filter='none'">Varsayılan</button></div>`;
+  area.innerHTML = `
+  <div class="panel" style="margin-top:15px">
+    <h2>🎨 Tema</h2>
+    <button class="btn" onclick="document.body.style.filter='hue-rotate(80deg)'">Yeşil Tema</button>
+    <button class="btn" onclick="document.body.style.filter='hue-rotate(160deg)'">Mavi Tema</button>
+    <button class="btn" onclick="document.body.style.filter='none'">Varsayılan</button>
+  </div>`;
 }
 
 function adminPage(){
- area.innerHTML=`<div class="panel" style="margin-top:15px"><h2>💎 Admin Paneli</h2><h3>Kullanıcılar</h3>${profiles.map(p=>`<p>${p.email} - ${p.role} - seviye ${p.level||1} ${p.badge==="diamond"?"💎":p.badge==="gold"?"👑":""}</p>`).join("")}</div>`;
+  area.innerHTML = `
+  <div class="panel" style="margin-top:15px">
+    <h2>💎 Admin Paneli</h2>
+    <p>Admin koduyla giriş yapıldı.</p>
+    <p>Admin; malzeme ekleyebilir, silebilir, duyuru gönderebilir.</p>
+  </div>`;
 }
 
 function toggleForm(){form.classList.toggle("hidden")}
-async function logout(){await db.auth.signOut();showLogin()}
-function v(id){return document.getElementById(id)?.value.trim()||""}
-function showMsg(t,e=false){msg.innerText=t;msg.className=e?"msg err":"msg"}
+function logout(){role="guest";showLogin()}
+function v(id){return document.getElementById(id)?.value.trim() || ""}
+function showMsg(t,e=false){msg.innerText=t;msg.className=e ? "msg err" : "msg"}
 </script>
+
 </body>
 </html>
