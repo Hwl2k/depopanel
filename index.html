@@ -3,188 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DepoPanel Giriş</title>
+<title>DepoPanel</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:#020617;
-  color:white;
-  min-height:100vh;
-  overflow:hidden;
-}
-.page{
-  min-height:100vh;
-  display:grid;
-  grid-template-columns:1.1fr 1fr;
-  background:
-    radial-gradient(circle at 25% 40%,rgba(124,58,237,.35),transparent 35%),
-    radial-gradient(circle at 70% 30%,rgba(59,130,246,.18),transparent 30%),
-    #020617;
-}
-.left{
-  position:relative;
-  padding:70px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-.logoBox{
-  text-align:center;
-  animation:float 3s ease-in-out infinite;
-}
-.logo{
-  font-size:110px;
-  filter:drop-shadow(0 0 35px #7c3aed);
-}
-h1{
-  font-size:64px;
-  margin:10px 0;
-}
+{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#020617;color:white;min-height:100vh}
+.page{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr;background:radial-gradient(circle at 25% 40%,rgba(124,58,237,.35),transparent 35%),radial-gradient(circle at 70% 30%,rgba(59,130,246,.18),transparent 30%),#020617}
+.left{position:relative;padding:70px;display:flex;flex-direction:column;justify-content:center}
+.logoBox{text-align:center;animation:float 3s ease-in-out infinite}
+.logo{font-size:110px;filter:drop-shadow(0 0 35px #7c3aed)}
+h1{font-size:64px;margin:10px 0}
 h1 span{color:#7c3aed}
-.subtitle{
-  font-size:22px;
-  color:#cbd5e1;
-}
-.features{
-  display:flex;
-  gap:30px;
-  margin-top:90px;
-}
-.feature{
-  flex:1;
-  border-left:1px solid #334155;
-  padding-left:20px;
-}
-.feature b{color:white}
+.subtitle{font-size:22px;color:#cbd5e1}
+.features{display:flex;gap:30px;margin-top:90px}
+.feature{flex:1;border-left:1px solid #334155;padding-left:20px}
 .feature p{color:#94a3b8}
-.wave{
-  position:absolute;
-  bottom:70px;
-  left:0;
-  width:100%;
-  height:180px;
-  background:linear-gradient(90deg,transparent,#6d28d9,transparent);
-  opacity:.3;
-  filter:blur(35px);
-}
-.right{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:50px;
-}
-.card{
-  width:100%;
-  max-width:560px;
-  background:rgba(15,23,42,.78);
-  border:1px solid #263449;
-  border-radius:24px;
-  padding:45px;
-  box-shadow:0 0 70px rgba(0,0,0,.35);
-  backdrop-filter:blur(18px);
-}
-.card h2{
-  text-align:center;
-  font-size:34px;
-  margin:0;
-}
-.card .desc{
-  text-align:center;
-  color:#cbd5e1;
-  margin-bottom:35px;
-}
-.tabs{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  border-bottom:1px solid #334155;
-  margin-bottom:25px;
-}
-.tab{
-  padding:16px;
-  text-align:center;
-  cursor:pointer;
-  color:#cbd5e1;
-}
-.tab.active{
-  color:#a855f7;
-  border-bottom:3px solid #8b5cf6;
-  font-weight:bold;
-}
-.input{
-  width:100%;
-  margin:14px 0;
-  padding:17px;
-  border-radius:12px;
-  background:#111827;
-  border:1px solid #374151;
-  color:white;
-  font-size:16px;
-}
-.row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  color:#cbd5e1;
-  font-size:14px;
-}
-.btn{
-  width:100%;
-  margin-top:25px;
-  padding:17px;
-  border:0;
-  border-radius:12px;
-  background:linear-gradient(90deg,#8b5cf6,#4f46e5);
-  color:white;
-  font-size:18px;
-  font-weight:bold;
-  cursor:pointer;
-}
+.wave{position:absolute;bottom:70px;left:0;width:100%;height:180px;background:linear-gradient(90deg,transparent,#6d28d9,transparent);opacity:.3;filter:blur(35px)}
+.right{display:flex;align-items:center;justify-content:center;padding:50px}
+.card{width:100%;max-width:560px;background:rgba(15,23,42,.78);border:1px solid #263449;border-radius:24px;padding:45px;box-shadow:0 0 70px rgba(0,0,0,.35);backdrop-filter:blur(18px)}
+.card h2{text-align:center;font-size:34px;margin:0}
+.desc{text-align:center;color:#cbd5e1;margin-bottom:35px}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid #334155;margin-bottom:25px}
+.tab{padding:16px;text-align:center;cursor:pointer;color:#cbd5e1}
+.tab.active{color:#a855f7;border-bottom:3px solid #8b5cf6;font-weight:bold}
+.input{width:100%;margin:14px 0;padding:17px;border-radius:12px;background:#111827;border:1px solid #374151;color:white;font-size:16px}
+.row{display:flex;justify-content:space-between;align-items:center;color:#cbd5e1;font-size:14px}
+.btn{width:100%;margin-top:25px;padding:17px;border:0;border-radius:12px;background:linear-gradient(90deg,#8b5cf6,#4f46e5);color:white;font-size:18px;font-weight:bold;cursor:pointer}
 .btn:hover{filter:brightness(1.15)}
-.google{
-  background:#111827;
-  border:1px solid #374151;
-}
-.msg{
-  text-align:center;
-  margin-top:15px;
-  color:#a7f3d0;
-}
+.google{background:#111827;border:1px solid #374151}
+.msg{text-align:center;margin-top:15px;color:#a7f3d0}
 .error{color:#fca5a5}
-.footer{
-  text-align:center;
-  color:#94a3b8;
-  margin-top:25px;
-}
-.footer span{
-  color:#a855f7;
-  cursor:pointer;
-}
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-14px)}
-}
-@media(max-width:900px){
-  body{overflow:auto}
-  .page{grid-template-columns:1fr}
-  .left{padding:35px}
-  h1{font-size:46px}
-  .features{display:block;margin-top:40px}
-  .right{padding:25px}
-}
+.footer{text-align:center;color:#94a3b8;margin-top:25px}
+.footer span{color:#a855f7;cursor:pointer}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@media(max-width:900px){.page{grid-template-columns:1fr}.left{padding:35px}h1{font-size:46px}.features{display:block;margin-top:40px}.right{padding:25px}.tabs{font-size:13px}}
 </style>
 </head>
 
 <body>
 
 <div class="page">
-
   <div class="left">
     <div class="wave"></div>
-
     <div class="logoBox">
       <div class="logo">🔷</div>
       <h1>Depo<span>Panel</span></h1>
@@ -192,18 +53,9 @@ h1 span{color:#7c3aed}
     </div>
 
     <div class="features">
-      <div class="feature">
-        <b>⚙️ Kolay Yönetim</b>
-        <p>Tüm malzemelerinizi tek yerden yönetin.</p>
-      </div>
-      <div class="feature">
-        <b>🛡️ Güvenli Sistem</b>
-        <p>Üyelik, admin ve seviye sistemi.</p>
-      </div>
-      <div class="feature">
-        <b>🤖 Akıllı Asistan</b>
-        <p>Proje önerileri ve eksik parça takibi.</p>
-      </div>
+      <div class="feature"><b>⚙️ Kolay Yönetim</b><p>Tüm malzemelerinizi tek yerde yönetin</p></div>
+      <div class="feature"><b>🤖 Akıllı Asistan</b><p>Yapay zeka ile size özel öneriler alın</p></div>
+      <div class="feature"><b>🛡️ Güvenli Sistem</b><p>Verileriniz güvende, erişiminiz kontrol altında</p></div>
     </div>
   </div>
 
@@ -215,6 +67,7 @@ h1 span{color:#7c3aed}
       <div class="tabs">
         <div id="loginTab" class="tab active" onclick="setMode('login')">🔐 Oturum Aç</div>
         <div id="registerTab" class="tab" onclick="setMode('register')">👤 Kayıt Ol</div>
+        <div id="adminTab" class="tab" onclick="setMode('admin')">💎 Admin</div>
       </div>
 
       <input id="email" class="input" type="email" placeholder="E-posta adresiniz">
@@ -232,9 +85,7 @@ h1 span{color:#7c3aed}
       <button id="mainBtn" class="btn" onclick="mainAction()">Giriş Yap</button>
 
       <p class="footer">veya</p>
-
       <button class="btn google">🌈 Google ile Giriş Yap</button>
-
       <p id="msg" class="msg"></p>
 
       <p class="footer">
@@ -243,109 +94,101 @@ h1 span{color:#7c3aed}
       </p>
     </div>
   </div>
-
 </div>
 
 <script>
 const SUPABASE_URL = "https://slchqkwqqbptqnmfrihj.supabase.co/rest/v1/";
-const SUPABASE_KEY = "sb_publishable_uQp7kd_fuDh1Ripft2nj5g_Nk3UjfsA";
+const SUPABASE_KEY = "slchqkwqqbptqnmfrihj";
+const ADMIN_EMAIL = "turkerarseven@gmail.com";
 
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+const INVITE_CODE = "DEPANEL2025";
 let mode = "login";
 
 function setMode(newMode){
   mode = newMode;
-
-  document.getElementById("loginTab").classList.toggle("active", mode === "login");
-  document.getElementById("registerTab").classList.toggle("active", mode === "register");
-
-  document.getElementById("inviteBox").style.display = mode === "register" ? "block" : "none";
-  document.getElementById("mainBtn").innerText = mode === "login" ? "Giriş Yap" : "Kayıt Ol";
+  document.getElementById("loginTab").classList.toggle("active", mode==="login");
+  document.getElementById("registerTab").classList.toggle("active", mode==="register");
+  document.getElementById("adminTab").classList.toggle("active", mode==="admin");
+  document.getElementById("inviteBox").style.display = mode==="register" ? "block" : "none";
+  document.getElementById("mainBtn").innerText =
+    mode==="register" ? "Kayıt Ol" : mode==="admin" ? "Admin Girişi" : "Giriş Yap";
   document.getElementById("msg").innerText = "";
 }
 
 async function mainAction(){
-  if(mode === "login"){
-    await login();
-  }else{
-    await register();
-  }
+  if(mode==="register") return register();
+  if(mode==="admin") return adminLogin();
+  return login();
 }
 
 async function register(){
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
+  const email = emailVal();
+  const password = passVal();
   const inviteCode = document.getElementById("inviteCode").value.trim();
 
-  if(!email || !password){
-    showMsg("E-posta ve şifre boş olamaz.", true);
-    return;
-  }
+  if(!email || !password) return showMsg("E-posta ve şifre boş olamaz.", true);
+  if(inviteCode !== INVITE_CODE) return showMsg("Geçersiz davet kodu.", true);
 
-  if(!inviteCode){
-    showMsg("Kayıt için davet kodu gerekli.", true);
-    return;
-  }
+  const {data,error} = await db.auth.signUp({email,password});
+  if(error) return showMsg(error.message,true);
 
-  const { data, error } = await db.auth.signUp({
-    email: email,
-    password: password
-  });
-
-  if(error){
-    showMsg(error.message, true);
-    return;
-  }
-
-  const user = data.user;
-
-  if(user){
+  if(data.user){
     await db.from("profiles").insert({
-      id: user.id,
-      email: email,
-      role: "user",
-      level: 1,
-      badge: "none",
-      joined_at: new Date().toISOString(),
-      last_seen: new Date().toISOString()
+      id:data.user.id,
+      email,
+      role:"user",
+      level:1,
+      badge:"none",
+      joined_at:new Date().toISOString(),
+      last_seen:new Date().toISOString()
     });
   }
 
-  showMsg("Kayıt başarılı! Şimdi giriş yapabilirsin.", false);
+  showMsg("Kayıt başarılı. Şimdi giriş yapabilirsin.",false);
   setMode("login");
 }
 
 async function login(){
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
+  const email = emailVal();
+  const password = passVal();
 
-  if(!email || !password){
-    showMsg("E-posta ve şifre boş olamaz.", true);
-    return;
-  }
+  if(!email || !password) return showMsg("E-posta ve şifre boş olamaz.", true);
 
-  const { data, error } = await db.auth.signInWithPassword({
-    email: email,
-    password: password
+  const {data,error} = await db.auth.signInWithPassword({email,password});
+  if(error) return showMsg(error.message,true);
+
+  await openPanel(data.user,"user");
+}
+
+async function adminLogin(){
+  const email = emailVal();
+  const password = passVal();
+
+  if(email !== ADMIN_EMAIL) return showMsg("Bu hesap admin değil.", true);
+
+  const {data,error} = await db.auth.signInWithPassword({email,password});
+  if(error) return showMsg(error.message,true);
+
+  await db.from("profiles").upsert({
+    id:data.user.id,
+    email,
+    role:"admin",
+    level:20,
+    badge:"diamond",
+    joined_at:new Date().toISOString(),
+    last_seen:new Date().toISOString()
   });
 
-  if(error){
-    showMsg(error.message, true);
-    return;
-  }
+  await openPanel(data.user,"admin");
+}
 
-  showMsg("Giriş başarılı! Panel açılıyor...", false);
+async function openPanel(user, forcedRole){
+  const {data:profile} = await db.from("profiles").select("").eq("id", user.id).single();
+  const role = forcedRole || profile?.role || "user";
+  const badge = role==="admin" ? "💎 Admin" : profile?.badge==="gold" ? "👑 Kıdemli Üye" : "Üye";
 
-  setTimeout(() => {
-    document.body.innerHTML = `
-      <div style="min-height:100vh;background:#07111f;color:white;font-family:Arial;padding:30px">
-        <h1>🔷 DepoPanel</h1>
-        <p>Giriş başarılı. Sonraki adımda buraya admin panelini bağlayacağız.</p>
-        <button onclick="logout()" style="padding:12px 20px;border:0;border-radius:8px;background:#7c3aed;color:white">Çıkış Yap</button>
-      </div>
-    `;
-  }, 1000);
+  document.body.innerHTML =    <div style="min-height:100vh;background:#07111f;color:white;font-family:Arial;padding:30px">     <h1>🔷 DepoPanel</h1>     <p>Hoş geldin: <b>${user.email}</b></p>     <p>Yetki: <b>${role}</b> | Rozet: <b>${badge}</b></p>      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;margin-top:25px">       <div style="background:#0f1b2e;padding:20px;border-radius:16px">📦 Malzemeler</div>       <div style="background:#0f1b2e;padding:20px;border-radius:16px">🤖 Yapay Zeka</div>       <div style="background:#0f1b2e;padding:20px;border-radius:16px">💬 Mesajlar</div>       <div style="background:#0f1b2e;padding:20px;border-radius:16px">${role==="admin" ? "💎 Admin Paneli" : "👤 Üye Paneli"}</div>     </div>      <button onclick="logout()" style="margin-top:30px;padding:12px 20px;border:0;border-radius:8px;background:#7c3aed;color:white">Çıkış Yap</button>   </div>;
 }
 
 async function logout(){
@@ -353,12 +196,14 @@ async function logout(){
   location.reload();
 }
 
-function showMsg(text, isError){
-  const msg = document.getElementById("msg");
-  msg.innerText = text;
-  msg.className = isError ? "msg error" : "msg";
+function emailVal(){return document.getElementById("email").value.trim();}
+function passVal(){return document.getElementById("password").value.trim();}
+function showMsg(text,isError){
+  const msg=document.getElementById("msg");
+  msg.innerText=text;
+  msg.className=isError ? "msg error" : "msg";
 }
 </script>
 
 </body>
-</html>
+</html
