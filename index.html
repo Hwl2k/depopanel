@@ -3,110 +3,152 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Depo Panel</title>
-
+<title>DepoPanel</title>
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background: #0f172a;
-    color: white;
-    margin: 0;
-}
-
-.header {
-    background: #1e293b;
-    padding: 15px;
-    text-align: center;
-    font-size: 22px;
-    font-weight: bold;
-}
-
-.container {
-    padding: 20px;
-}
-
-.search {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: none;
-}
-
-.card {
-    background: #1e293b;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 10px;
-    display: flex;
-    gap: 15px;
-    align-items: center;
-}
-
-.card img {
-    width: 100px;
-    border-radius: 10px;
-}
-
-button {
-    background: #3b82f6;
-    border: none;
-    padding: 10px;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #2563eb;
-}
-
-.ai-box {
-    background: #111827;
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 20px;
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#07111f;color:white}
+.app{display:flex;min-height:100vh}
+.sidebar{width:260px;background:#081322;border-right:1px solid #1f2a3a;padding:20px}
+.logo{font-size:24px;font-weight:bold;margin-bottom:30px}
+.menu div{padding:13px;border-radius:10px;margin:6px 0;color:#cbd5e1}
+.menu div.active,.menu div:hover{background:#4f46e5;color:white}
+.guest{margin-top:40px;background:#0f1b2e;padding:18px;border-radius:15px;text-align:center}
+.guest button,.addBtn,.ai button{background:#22c55e;color:white;border:0;padding:12px;border-radius:10px;width:100%;font-weight:bold}
+.main{flex:1;padding:18px}
+.top{display:flex;gap:15px;align-items:center;margin-bottom:20px}
+.search{flex:1;background:#0f1b2e;border:1px solid #243247;color:white;padding:14px;border-radius:12px}
+.addBtn{width:170px;background:#4f46e5}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.stat,.panel,.ai,.project{background:#0f1b2e;border:1px solid #243247;border-radius:15px;padding:18px}
+.stat h2{margin:8px 0;font-size:30px}
+.content{display:grid;grid-template-columns:2fr 1fr;gap:15px;margin-top:15px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:13px;border-bottom:1px solid #243247;text-align:left}
+th{color:#94a3b8}
+img{width:60px;height:45px;object-fit:cover;border-radius:8px;background:white}
+.tag{padding:6px 10px;border-radius:8px;background:#312e81;color:#c4b5fd}
+.good{color:#22c55e}.low{color:#f59e0b}.bad{color:#ef4444}
+.ai h3{color:#8b5cf6}
+.ai input{width:100%;padding:13px;border-radius:10px;border:1px solid #334155;background:#111827;color:white;margin-top:10px}
+.ai button{margin-top:10px;background:#7c3aed}
+.project{margin-top:15px}
+.project img{width:100%;height:150px}
+@media(max-width:900px){
+.app{display:block}
+.sidebar{width:100%}
+.stats{grid-template-columns:1fr 1fr}
+.content{grid-template-columns:1fr}
 }
 </style>
-
 </head>
-
 <body>
 
-<div class="header">📦 Depo Panel</div>
+<div class="app">
 
-<div class="container">
+<div class="sidebar">
+<div class="logo">🔷 DepoPanel</div>
+<div class="menu">
+<div class="active">🏠 Ana Sayfa</div>
+<div>📦 Tüm Malzemeler</div>
+<div>🗂️ Kategoriler</div>
+<div>📍 Reyonlar</div>
+<div>⚠️ Az Kalanlar</div>
+<div>🚚 Eksik Malzemeler</div>
+<br>
+<div>🤖 Yapay Zeka Asistanı</div>
+<div>✨ Proje Fikirleri</div>
+<div>💡 Eksik Parça Önerileri</div>
+<br>
+<div>💬 Mesajlar</div>
+<div>📢 Duyurular</div>
+<br>
+<div>👥 Kullanıcılar</div>
+<div>🔑 Davet Kodları</div>
+<div>⚙️ Ayarlar</div>
+</div>
 
-<input class="search" placeholder="Malzeme ara...">
+<div class="guest">
+<h3>Misafir Modu</h3>
+<p>Sınırlı erişimdesiniz</p>
+<button>🔒 Üye Girişi Yap</button>
+</div>
+</div>
 
-<div class="card">
-<img src="https://via.placeholder.com/100">
+<div class="main">
+
+<div class="top">
+<input class="search" placeholder="🔍 Malzeme ara...">
+<button class="addBtn">+ Malzeme Ekle</button>
+<div>🔔</div>
+<div>Hoş geldin, <b>Admin</b></div>
+</div>
+
+<div class="stats">
+<div class="stat"><p>Toplam Malzeme</p><h2>243</h2><span class="good">+12 bu ay</span></div>
+<div class="stat"><p>Az Kalanlar</p><h2>18</h2><span class="low">Dikkat edilmeli</span></div>
+<div class="stat"><p>Eksik Malzemeler</p><h2>7</h2><span class="bad">Sipariş verilmeli</span></div>
+<div class="stat"><p>Toplam Değer</p><h2>₺45.250</h2><span>Tahmini değer</span></div>
+</div>
+
+<div class="content">
+
 <div>
-<h3>Arduino Uno</h3>
-<p>Adet: 2</p>
-<p>Reyon: Elektronik</p>
-<p>Raf: A1</p>
+<div class="panel">
+<h2>Malzemeler</h2>
+<p>Tüm malzemelerin listesi</p>
+<table>
+<tr>
+<th>Fotoğraf</th><th>Malzeme Adı</th><th>Kategori</th><th>Reyon</th><th>Adet</th><th>Durum</th>
+</tr>
+<tr>
+<td><img src="https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"></td>
+<td>Arduino Uno R3</td><td><span class="tag">Elektronik</span></td><td>A1-01</td><td>2 adet</td><td class="low">Az Kaldı</td>
+</tr>
+<tr>
+<td><img src="https://upload.wikimedia.org/wikipedia/commons/8/87/HD44780_LCD_16x2_display.jpg"></td>
+<td>LCD 16x2 Ekran</td><td><span class="tag">Ekranlar</span></td><td>B2-03</td><td>1 adet</td><td class="low">Az Kaldı</td>
+</tr>
+<tr>
+<td><img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Resistors.JPG"></td>
+<td>220 Ohm Direnç</td><td><span class="tag">Elektronik</span></td><td>A1-05</td><td>50 adet</td><td class="good">Yeterli</td>
+</tr>
+<tr>
+<td><img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Jumper_wires.jpg"></td>
+<td>Jumper Kablo</td><td><span class="tag">Kablolar</span></td><td>C1-02</td><td>0 adet</td><td class="bad">Eksik</td>
+</tr>
+</table>
+</div>
+
+<div class="panel" style="margin-top:15px">
+<h2>Son Duyurular</h2>
+<p>📢 LCD ekranlar artık B2 reyonunda bulunmaktadır.</p>
+<p>📢 Haftalık stok kontrolü yapılacaktır.</p>
 </div>
 </div>
 
-<div class="card">
-<img src="https://via.placeholder.com/100">
 <div>
-<h3>LCD 16x2</h3>
-<p>Adet: 1 (AZ)</p>
-<p>Reyon: Ekranlar</p>
-<p>Raf: B2</p>
+<div class="ai">
+<h3>✨ Yapay Zeka Asistanı</h3>
+<p>Merhaba 👋 Ben senin yapay zeka asistanın. Sana proje fikri verebilirim.</p>
+<button>Elimdeki malzemelerle ne yapabilirim?</button>
+<button>Eksik malzemeleri listele</button>
+<button>Bana proje fikri ver</button>
+<input placeholder="Sorunuzu yazın...">
+</div>
+
+<div class="project">
+<h3>🏆 Proje Fikri Önerisi</h3>
+<img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800">
+<h3>Akıllı Hava Kalitesi Monitörü</h3>
+<p>DHT11 sensörü ile sıcaklık ve nem ölçen, LCD ekranda gösteren sistem.</p>
+<p><span class="tag">Arduino</span> <span class="tag">LCD 16x2</span></p>
+<button class="addBtn" style="width:100%">Detayları Gör</button>
 </div>
 </div>
 
-<button>+ Malzeme Ekle</button>
-
-<div class="ai-box">
-<h3>🤖 Yapay Zeka Önerisi</h3>
-<p>Arduino + LCD ile mini saat yapabilirsin.</p>
 </div>
-
+</div>
 </div>
 
 </body>
-</html>
+</htm
